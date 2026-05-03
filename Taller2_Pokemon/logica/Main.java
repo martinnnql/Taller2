@@ -8,7 +8,7 @@ import dominio.*;
 public class Main {
 	static ArrayList<String> habitats = new ArrayList<>();
 	static ArrayList<Pokemon> pokemones = new ArrayList<>();
-	
+	static ArrayList<LiderGym> lideres = new ArrayList<>();
 	public static void main(String[] args) throws FileNotFoundException{
 
 		cargarHabitats();
@@ -160,4 +160,25 @@ public class Main {
 			
 		}
 	}
+	public static void cargarLideres() throws FileNotFoundException{
+        File archivo = new File("Gimnasios.txt");
+        Scanner lector = new Scanner(archivo);
+
+        while(lector.hasNextLine()) {
+            String linea = lector.nextLine();
+            String[] partes = linea.split(";");
+
+            int numGym = Integer.parseInt(partes[0]);
+            String nombre = partes[1];
+            String estado = partes[2];
+            int cantPokemones = Integer.parseInt(partes[3]);
+            ArrayList<String> pokeTemp = new ArrayList<>();
+            for(int i = 1; i < cantPokemones; i++) {
+                String pokemon = partes[3+i];
+                pokeTemp.add(pokemon);
+            }
+            LiderGym nuevoLider = new LiderGym(numGym,nombre,estado,cantPokemones,pokeTemp);
+            lideres.add(nuevoLider);
+        }
+    }
 }
