@@ -4,7 +4,7 @@ public class LiderGym {
 	private int numGym;
 	private String nombre;
 	private String estado;
-	private int cantPokemones;
+	private int cantPokemones; // hola
 	private ArrayList<String> equipo;
 	
 	
