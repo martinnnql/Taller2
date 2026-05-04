@@ -16,7 +16,9 @@ public class Main {
 		
 		
 		//Primer menu
+		
 		int opcionMenu1 = cargarMenu1();
+		
 		
 		if (opcionMenu1 == 3) {
 			System.out.println("Saliendo . . .");
@@ -119,7 +121,6 @@ public class Main {
 	}
 
 	private static int cargarMenu1() {
-		// TODO Auto-generated method stub
 		Scanner s = new Scanner(System.in);
 		System.out.println("1) Continuar. \n2) Nueva Partida. \n3) Salir.");
 		System.out.print("Ingrese Opcion: ");
