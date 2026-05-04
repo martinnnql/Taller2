@@ -166,9 +166,11 @@ public class Main {
 			// hola nacho aqui falta hacer todo lo de capturar al pokemon ( q tenga
 			// probabilidad de capturarlo ) y meterlo al equipo
 			
+			System.out.println(pokeSalvaje.getNombre() + " capturado con exito!!");
 			
-			
-			
+			System.out.println(pokeSalvaje.getNombre() + " ha sido agregado a tu equipo!");
+			// ACA AÑADIR POKEMONES A LA LISTA DE POKEMONES DE LA PERSONA, ARRAYLIST DE POKEMONES EN GENERAL Y LISTA POKEMONES EQUIPO
+			// AUNQUE CREO QUE TIENE QUE ESTAR EN UN TXT PERO ESO HAY QUE CRANEARLO MAS OK
 		}
 
 	}
