@@ -16,6 +16,7 @@ public class Main {
 	static ArrayList<String> habitats = new ArrayList<>();
 	static ArrayList<Pokemon> pokemones = new ArrayList<>();
 	static ArrayList<Pokemon> pokemonesJugador = new ArrayList<>();
+	static ArrayList<Pokemon> pokemonesJugadorContinuePartida = new ArrayList<>();
 	static ArrayList<LiderGym> lideres = new ArrayList<>();
 
 	public static void main(String[] args) throws IOException {
@@ -24,7 +25,7 @@ public class Main {
 		cargarPokemones();
 
 		// Primer menu
-		
+
 		int opcionMenu1 = cargarMenu1();
 
 		if (opcionMenu1 == 3) {
@@ -34,11 +35,12 @@ public class Main {
 		if (opcionMenu1 == 1) {
 
 			cargarRegistro();
-			
+
 			cargarOpciones();
 		}
 
 		if (opcionMenu1 == 2) {
+
 			String nombreJugador = ingresarNombre();
 			System.out.println("\nBienvenido " + nombreJugador + "!!");
 
@@ -70,6 +72,7 @@ public class Main {
 				break;
 			case 3:
 				// Acceso al PC (Cambiar pokemones del equipo)
+				pcCambiarPokes();
 				
 				break;
 			case 4:
@@ -104,8 +107,91 @@ public class Main {
 		}
 	}
 
+	private static void pcCambiarPokes() {
+		// TODO Auto-generated method stub
+		Scanner s = new Scanner(System.in);
+		
+		// mostrar de manera numerada todos los Pokémon que el usuario haya capturado.
+		int cont = 1;
+		for (Pokemon pokemon : pokemonesJugador) {
+			System.out.println("\n"+cont + ") " + pokemon.getNombre());
+			cont++;
+		}
+		
+		// mostrar opciones
+		int opcion = 0;
+		boolean condicion = false;
+
+		while (!condicion) {
+
+			try {
+				System.out.println("1) Cambiar Pokémon. \n2) Salir.");
+				System.out.print("> ");
+				opcion = s.nextInt();
+				s.nextLine();
+
+				if (opcion <= 2 && opcion >= 1) {
+					condicion = true;
+				} else {
+					System.err.println("\nIngrese un numero valido\n");
+				}
+
+				if (opcion == 2) {
+					System.out.println("\nVolviendo . . . ");
+					return;
+				}
+
+			} catch (Exception e) {
+				System.err.println("\nIngrese un valor valido\n");
+				s.nextLine();
+			}
+
+		}
+		
+		// condicion true
+		if(opcion == 1) {
+			intercambiarPokes();
+		}
+		
+		
+		
+	}
+
+	private static void intercambiarPokes() {
+		Scanner s = new Scanner(System.in);
+		int cantPokes = pokemonesJugador.size();
+		
+		
+		int intercambio1=0;
+		do {
+			System.out.println("Elije el primer pokemon para cambiar: ");
+			System.out.print("> ");
+
+			if (s.hasNextInt()) {
+				intercambio1 = s.nextInt();
+				
+				if(intercambio1<0 || intercambio1>cantPokes) {
+					System.err.println("Ingrese un número válido.");
+				}
+				
+				
+			}else {
+				System.err.println("Elije un número válido.");
+				intercambio1 =0;
+			}
+			
+		}while(intercambio1<0 || intercambio1>cantPokes);
+		
+		System.out.print("Elije el segundo pokemon para cambiar: ");
+		
+		int intercambio2 = s.nextInt();
+		
+		// hacer el intercambio con los index (intercambio -1) *CANT POKES +1 POSIBLEMENTE*
+		
+	}
+
 	private static void nuevoJugador(String nombreJugador) throws IOException {
-		BufferedWriter bf = new BufferedWriter(new FileWriter("Registros.txt", true));
+		BufferedWriter bf = new BufferedWriter(new FileWriter("Registros.txt"));
 		String linea = nombreJugador + ";" + 0;
 		bf.write(linea);
 		bf.newLine();
@@ -127,31 +213,49 @@ public class Main {
 			String lineaPoke = lector.nextLine();
 			String[] partesPoke = lineaPoke.split(";");
 
-			String nombrePoke = partes[0];
-			String estadoPoke = partes[1];
+			String nombrePoke = partesPoke[0];
+			String estadoPoke = partesPoke[1];
 
 			// PA DESPUES, PRIMERO TERMINAR GUARDAR Y GUARDAR Y SALIR
+			identificarPokes(nombrePoke);
 		}
+		System.out.println("\nBienvenido " + nombreJugador + "!!");
 
 		lector.close();
 
 	}
 
-	private static void revisarEquipo() {
+	private static void identificarPokes(String nombrePoke) {
+		// TODO Auto-generated method stub
+		for (Pokemon pokemon : pokemones) {
+			if (nombrePoke.equals(pokemon.getNombre())) {
+				pokemonesJugador.add(pokemon);
 
-		int cont = 1;
+			}
+
+		}
+	}
+
+	private static void revisarEquipo() {
 
 		if (pokemonesJugador.size() == 0) {
 			System.out.println("\nNo tienes pokemones en tu equipo!");
-		} else {
-
-			for (Pokemon pokemon : pokemonesJugador) {
-
-				System.out.println(cont + ") " + pokemon.getNombre() + " | " + pokemon.getTipo() + " | "
-						+ pokemon.sumaStats() + "\n");
-				cont++;
-			}
 		}
+		mostrarequipoNuevaPartida();
+
+	}
+
+	private static void mostrarequipoNuevaPartida() {
+		// TODO Auto-generated method stub
+		int cont = 1;
+
+		for (Pokemon pokemon : pokemonesJugador) {
+
+			System.out.println(cont + ") " + pokemon.getNombre() + " | " + pokemon.getTipo() + " | " + "Stats totales: "
+					+ pokemon.sumaStats() + "\n");
+			cont++;
+		}
+
 	}
 
 	private static void curarEquipo() {

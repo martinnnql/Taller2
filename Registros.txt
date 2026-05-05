@@ -1,3 +1,4 @@
 pepe;0
-Gyarados;Vivo
-Infernape;Vivo
+Floatzel;Vivo
+Milotic;Vivo
+Groudon;Vivo
