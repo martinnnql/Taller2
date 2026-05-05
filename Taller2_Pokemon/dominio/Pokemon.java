@@ -12,7 +12,7 @@ public class Pokemon {
 	private int defensaEspecial;
 	private int velocidad;
 	private String tipo;
-	private String estado;
+	private String estado = "Vivo";
 	
 	
 	public Pokemon(String nombre, String habitat, double porcentajeAparicion, int vida, int ataque, int defensa,
@@ -63,7 +63,7 @@ public class Pokemon {
 
 
 
-	public boolean setEstadoPoke() {
+	public boolean getEstadoPoke() {
 		if (estado.equals("Vivo")) {
 			return true;
 		} else {
@@ -169,6 +169,18 @@ public class Pokemon {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+
+
+
+	public int sumaStats() {
+		// TODO Auto-generated method stub
+		int sum = 0;
+		
+		sum = vida + ataque + defensa + ataqueEspecial + defensaEspecial + velocidad;
+		
+		return sum;
 	}
 	
 	

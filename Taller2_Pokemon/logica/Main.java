@@ -2,6 +2,9 @@
 package logica;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -12,11 +15,11 @@ import dominio.*;
 public class Main {
 	static ArrayList<String> habitats = new ArrayList<>();
 	static ArrayList<Pokemon> pokemones = new ArrayList<>();
-	static ArrayList<Pokemon> equipo = new ArrayList<>();
+	static ArrayList<Pokemon> pokemonesJugador = new ArrayList<>();
 	static ArrayList<LiderGym> lideres = new ArrayList<>();
 
 	public static void main(String[] args) throws FileNotFoundException {
-
+		
 		cargarHabitats();
 		cargarPokemones();
 
@@ -26,6 +29,46 @@ public class Main {
 
 		if (opcionMenu1 == 3) {
 			System.out.println("Saliendo . . .");
+		}
+		
+		
+		if (opcionMenu1 == 1) {
+			
+			cargarRegistro();
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 		}
 
 		if (opcionMenu1 == 2) {
@@ -86,17 +129,43 @@ public class Main {
 
 	}
 
+	private static void cargarRegistro() throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		File archivo = new File("Registros.txt");
+		Scanner lector = new Scanner(archivo);
+		
+		String linea = lector.nextLine();
+		String[] partes = linea.split(";");
+		
+		String nombreJugador = partes[0];
+		int nMedallas = Integer.parseInt(partes[1]);	
+		
+		
+		while (lector.hasNextLine()) {
+			String lineaPoke = lector.nextLine();
+			String[] partesPoke = lineaPoke.split(";");
+			
+			String nombrePoke = partes[0];
+			String estadoPoke = partes[1];
+			
+			// PA DESPUES, PRIMERO TERMINAR GUARDAR Y GUARDAR Y SALIR
+		}
+		
+		lector.close();
+		
+	}
+
 	private static void revisarEquipo() {
 		
 		int cont=1;
 		
-		if (equipo.size() == 0) {
+		if (pokemonesJugador.size() == 0) {
 			System.out.println("\nNo tienes pokemones en tu equipo!");
 		} else {
 
-			for (Pokemon pokemon : equipo) {
+			for (Pokemon pokemon : pokemonesJugador) {
 
-				System.out.println(cont+") "+pokemon.getNombre() + "\n");
+				System.out.println(cont+") "+pokemon.getNombre() + " | " + pokemon.getTipo() + " | " + pokemon.sumaStats() + "\n");
 				cont++;
 			}
 		}
@@ -104,7 +173,7 @@ public class Main {
 
 	private static void curarEquipo() {
 
-		for (Pokemon pokemon : equipo) {
+		for (Pokemon pokemon : pokemonesJugador) {
 			if (pokemon.getVida() == 0) {
 				pokemon.setVida(pokemon.getVidaMax());
 				pokemon.setEstado("Vivo");
@@ -207,10 +276,22 @@ public class Main {
 			// ACA AÑADIR POKEMONES A LA LISTA DE POKEMONES DE LA PERSONA, ARRAYLIST DE
 			// POKEMONES EN GENERAL Y LISTA POKEMONES EQUIPO
 			// AUNQUE CREO QUE TIENE QUE ESTAR EN UN TXT PERO ESO HAY QUE CRANEARLO MAS OK
-			equipo.add(pokeSalvaje);
-
+			
+			pokemonesJugador.add(pokeSalvaje);
+			añadirPokeARegistros(pokeSalvaje);
 		}
 
+	}
+
+	private static void añadirPokeARegistros(Pokemon pokeSalvaje) throws IOException {
+		// TODO Auto-generated method stub
+		
+		BufferedWriter bf = new BufferedWriter( new FileWriter("Registros.txt", true));
+		
+		
+		
+		
+		
 	}
 
 	private static int cargarMenuCapturar() {
