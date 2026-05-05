@@ -18,154 +18,137 @@ public class Main {
 	static ArrayList<Pokemon> pokemonesJugador = new ArrayList<>();
 	static ArrayList<LiderGym> lideres = new ArrayList<>();
 
-	public static void main(String[] args) throws FileNotFoundException {
-		
+	public static void main(String[] args) throws IOException {
+
 		cargarHabitats();
 		cargarPokemones();
 
 		// Primer menu
-		boolean salir = false;
+		
 		int opcionMenu1 = cargarMenu1();
 
 		if (opcionMenu1 == 3) {
 			System.out.println("Saliendo . . .");
 		}
-		
-		
+
 		if (opcionMenu1 == 1) {
-			
+
 			cargarRegistro();
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+			cargarOpciones();
 		}
 
 		if (opcionMenu1 == 2) {
 			String nombreJugador = ingresarNombre();
 			System.out.println("\nBienvenido " + nombreJugador + "!!");
 
-			while (!salir) {
+			nuevoJugador(nombreJugador);
 
-				int opcionMenu2 = cargarMenu2();
-
-				switch (opcionMenu2) {
-				case 1:
-					// Revisar equipo
-
-					revisarEquipo();
-
-					break;
-				case 2:
-					// Salir a capturar
-
-					salirACapturar();
-
-					break;
-				case 3:
-					// Acceso al PC (Cambiar pokemones del equipo)
-
-					break;
-				case 4:
-					// Retar un GYM
-
-					break;
-				case 5:
-					// Desafio Alto Mando
-
-					break;
-				case 6:
-					// Curar Pokemones
-
-					curarEquipo();
-					System.out.println("Equipo recuperado con exito!");
-
-					break;
-				case 7:
-					// Guardar
-
-					break;
-				case 8:
-					// Guardar y salir
-
-					break;
-
-				default:
-					System.err.println("Ingrese un numero.");
-					break;
-				}
-			}
+			cargarOpciones();
 		}
 
+	}
+
+	private static void cargarOpciones() throws IOException {
+		boolean salir = false;
+		while (!salir) {
+
+			int opcionMenu2 = cargarMenu2();
+
+			switch (opcionMenu2) {
+			case 1:
+				// Revisar equipo
+
+				revisarEquipo();
+
+				break;
+			case 2:
+				// Salir a capturar
+
+				salirACapturar();
+
+				break;
+			case 3:
+				// Acceso al PC (Cambiar pokemones del equipo)
+				
+				break;
+			case 4:
+				// Retar un GYM
+
+				break;
+			case 5:
+				// Desafio Alto Mando
+
+				break;
+			case 6:
+				// Curar Pokemones
+
+				curarEquipo();
+				System.out.println("Equipo recuperado con exito!");
+
+				break;
+			case 7:
+				// Guardar
+				System.out.println("Guardando...");
+				break;
+			case 8:
+				// Guardar y salir
+				System.out.println("Guardando y saliendo...");
+				salir = true;
+				break;
+
+			default:
+				System.err.println("Ingrese un numero.");
+				break;
+			}
+		}
+	}
+
+	private static void nuevoJugador(String nombreJugador) throws IOException {
+		BufferedWriter bf = new BufferedWriter(new FileWriter("Registros.txt", true));
+		String linea = nombreJugador + ";" + 0;
+		bf.write(linea);
+		bf.newLine();
+		bf.close();
 	}
 
 	private static void cargarRegistro() throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		File archivo = new File("Registros.txt");
 		Scanner lector = new Scanner(archivo);
-		
+
 		String linea = lector.nextLine();
 		String[] partes = linea.split(";");
-		
+
 		String nombreJugador = partes[0];
-		int nMedallas = Integer.parseInt(partes[1]);	
-		
-		
+		int nMedallas = Integer.parseInt(partes[1]);
+
 		while (lector.hasNextLine()) {
 			String lineaPoke = lector.nextLine();
 			String[] partesPoke = lineaPoke.split(";");
-			
+
 			String nombrePoke = partes[0];
 			String estadoPoke = partes[1];
-			
+
 			// PA DESPUES, PRIMERO TERMINAR GUARDAR Y GUARDAR Y SALIR
 		}
-		
+
 		lector.close();
-		
+
 	}
 
 	private static void revisarEquipo() {
-		
-		int cont=1;
-		
+
+		int cont = 1;
+
 		if (pokemonesJugador.size() == 0) {
 			System.out.println("\nNo tienes pokemones en tu equipo!");
 		} else {
 
 			for (Pokemon pokemon : pokemonesJugador) {
 
-				System.out.println(cont+") "+pokemon.getNombre() + " | " + pokemon.getTipo() + " | " + pokemon.sumaStats() + "\n");
+				System.out.println(cont + ") " + pokemon.getNombre() + " | " + pokemon.getTipo() + " | "
+						+ pokemon.sumaStats() + "\n");
 				cont++;
 			}
 		}
@@ -177,14 +160,14 @@ public class Main {
 			if (pokemon.getVida() == 0) {
 				pokemon.setVida(pokemon.getVidaMax());
 				pokemon.setEstado("Vivo");
-				pokemon.setEstadoPoke(); // devuelve True, lo que significa que esta vivo | False = muerto
+				pokemon.getEstadoPoke(); // devuelve True, lo que significa que esta vivo | False = muerto
 
 			}
 		}
 
 	}
 
-	private static void salirACapturar() {
+	private static void salirACapturar() throws IOException {
 		Scanner s = new Scanner(System.in);
 
 		System.out.println("\nDonde deseas ir a explorar?");
@@ -229,7 +212,7 @@ public class Main {
 
 	}
 
-	private static void encuentroPokemon(String habitat) {
+	private static void encuentroPokemon(String habitat) throws IOException {
 		Random r = new Random();
 		ArrayList<Pokemon> pokeHabitat = new ArrayList<Pokemon>();
 
@@ -276,7 +259,7 @@ public class Main {
 			// ACA AÑADIR POKEMONES A LA LISTA DE POKEMONES DE LA PERSONA, ARRAYLIST DE
 			// POKEMONES EN GENERAL Y LISTA POKEMONES EQUIPO
 			// AUNQUE CREO QUE TIENE QUE ESTAR EN UN TXT PERO ESO HAY QUE CRANEARLO MAS OK
-			
+
 			pokemonesJugador.add(pokeSalvaje);
 			añadirPokeARegistros(pokeSalvaje);
 		}
@@ -284,14 +267,13 @@ public class Main {
 	}
 
 	private static void añadirPokeARegistros(Pokemon pokeSalvaje) throws IOException {
-		// TODO Auto-generated method stub
-		
-		BufferedWriter bf = new BufferedWriter( new FileWriter("Registros.txt", true));
-		
-		
-		
-		
-		
+
+		BufferedWriter bf = new BufferedWriter(new FileWriter("Registros.txt", true));
+		String linea = pokeSalvaje.getNombre() + ";" + pokeSalvaje.getEstado();
+
+		bf.write(linea);
+		bf.newLine();
+		bf.close();
 	}
 
 	private static int cargarMenuCapturar() {
