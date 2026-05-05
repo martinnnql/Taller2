@@ -93,10 +93,12 @@ public class Main {
 			case 7:
 				// Guardar
 				System.out.println("Guardando...");
+				guardarPartida();
 				break;
 			case 8:
 				// Guardar y salir
 				System.out.println("Guardando y saliendo...");
+				guardarPartida();
 				salir = true;
 				break;
 
@@ -107,8 +109,24 @@ public class Main {
 		}
 	}
 
+	private static void guardarPartida() throws IOException {
+		File archivo = new File("Registros.txt");
+		Scanner s = new Scanner(archivo);
+		String linea = s.nextLine(); // nombre;medallas
+		BufferedWriter bf = new BufferedWriter(new FileWriter("Registros.txt"));
+		bf.write(linea);
+		bf.newLine();
+	
+		for (Pokemon p : pokemonesJugador) {
+			String lineaPoke = p.getNombre() + ";" + p.getEstado();
+			bf.write(lineaPoke);
+			bf.newLine();
+		}
+		
+		bf.close();
+	}
+
 	private static void pcCambiarPokes() {
-		// TODO Auto-generated method stub
 		Scanner s = new Scanner(System.in);
 		
 		// mostrar de manera numerada todos los Pokémon que el usuario haya capturado.
@@ -182,12 +200,40 @@ public class Main {
 			
 		}while(intercambio1<0 || intercambio1>cantPokes);
 		
-		System.out.print("Elije el segundo pokemon para cambiar: ");
+		int intercambio2=0;
+		do {
+			System.out.println("Elije el segundo pokemon para cambiar: ");
+			System.out.print("> ");
+
+			if (s.hasNextInt()) {
+				intercambio2 = s.nextInt();
+				
+				if(intercambio2<0 || intercambio2>cantPokes) {
+					System.err.println("Ingrese un número válido.");
+				}
+				
+				
+			}else {
+				System.err.println("Elije un número válido.");
+				intercambio1 =0;
+			}
+			
+		}while(intercambio2<0 || intercambio2>cantPokes);
 		
-		int intercambio2 = s.nextInt();
+		intercambio1 -= 1;
+		intercambio2 -= 1;
 		
 		// hacer el intercambio con los index (intercambio -1) *CANT POKES +1 POSIBLEMENTE*
 		
+		int aux = intercambio2;
+		Pokemon auxPoke = pokemonesJugador.get(intercambio1);
+		
+		pokemonesJugador.set(intercambio1, pokemonesJugador.get(intercambio2));
+		
+		pokemonesJugador.set(aux,auxPoke);
+		
+		
+		System.out.println("Intercambio realizado con exito!");
 	}
 
 	private static void nuevoJugador(String nombreJugador) throws IOException {
