@@ -12,6 +12,7 @@ import dominio.*;
 public class Main {
 	static ArrayList<String> habitats = new ArrayList<>();
 	static ArrayList<Pokemon> pokemones = new ArrayList<>();
+	static ArrayList<Pokemon> equipo = new ArrayList<>();
 	static ArrayList<LiderGym> lideres = new ArrayList<>();
 
 	public static void main(String[] args) throws FileNotFoundException {
@@ -39,6 +40,8 @@ public class Main {
 				case 1:
 					// Revisar equipo
 
+					revisarEquipo();
+
 					break;
 				case 2:
 					// Salir a capturar
@@ -61,6 +64,9 @@ public class Main {
 				case 6:
 					// Curar Pokemones
 
+					curarEquipo();
+					System.out.println("Equipo recuperado con exito!");
+
 					break;
 				case 7:
 					// Guardar
@@ -75,6 +81,35 @@ public class Main {
 					System.err.println("Ingrese un numero.");
 					break;
 				}
+			}
+		}
+
+	}
+
+	private static void revisarEquipo() {
+		
+		int cont=1;
+		
+		if (equipo.size() == 0) {
+			System.out.println("\nNo tienes pokemones en tu equipo!");
+		} else {
+
+			for (Pokemon pokemon : equipo) {
+
+				System.out.println(cont+") "+pokemon.getNombre() + "\n");
+				cont++;
+			}
+		}
+	}
+
+	private static void curarEquipo() {
+
+		for (Pokemon pokemon : equipo) {
+			if (pokemon.getVida() == 0) {
+				pokemon.setVida(pokemon.getVidaMax());
+				pokemon.setEstado("Vivo");
+				pokemon.setEstadoPoke(); // devuelve True, lo que significa que esta vivo | False = muerto
+
 			}
 		}
 
@@ -165,12 +200,15 @@ public class Main {
 		} else if (opcionMenu == 1) {
 			// hola nacho aqui falta hacer todo lo de capturar al pokemon ( q tenga
 			// probabilidad de capturarlo ) y meterlo al equipo
-			
+
 			System.out.println(pokeSalvaje.getNombre() + " capturado con exito!!");
-			
+
 			System.out.println(pokeSalvaje.getNombre() + " ha sido agregado a tu equipo!");
-			// ACA AÑADIR POKEMONES A LA LISTA DE POKEMONES DE LA PERSONA, ARRAYLIST DE POKEMONES EN GENERAL Y LISTA POKEMONES EQUIPO
+			// ACA AÑADIR POKEMONES A LA LISTA DE POKEMONES DE LA PERSONA, ARRAYLIST DE
+			// POKEMONES EN GENERAL Y LISTA POKEMONES EQUIPO
 			// AUNQUE CREO QUE TIENE QUE ESTAR EN UN TXT PERO ESO HAY QUE CRANEARLO MAS OK
+			equipo.add(pokeSalvaje);
+
 		}
 
 	}

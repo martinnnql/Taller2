@@ -5,6 +5,7 @@ public class Pokemon {
 	private String habitat;
 	private double porcentajeAparicion;
 	private int vida;
+	private int vidaMax;
 	private int ataque;
 	private int defensa;
 	private int ataqueEspecial;
@@ -21,6 +22,7 @@ public class Pokemon {
 		this.habitat = habitat;
 		this.porcentajeAparicion = porcentajeAparicion;
 		this.vida = vida;
+		this.vidaMax = vida;
 		this.ataque = ataque;
 		this.defensa = defensa;
 		this.ataqueEspecial = ataqueEspecial;
@@ -31,7 +33,37 @@ public class Pokemon {
 	}
 
 
-	public boolean setEstado() {
+	
+	
+	public int getVidaMax() {
+		return vidaMax;
+	}
+
+
+
+
+	public void setVidaMax(int vidaMax) {
+		this.vidaMax = vidaMax;
+	}
+
+
+	
+
+	public String getEstado() {
+		return estado;
+	}
+
+
+
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+
+
+
+	public boolean setEstadoPoke() {
 		if (estado.equals("Vivo")) {
 			return true;
 		} else {
