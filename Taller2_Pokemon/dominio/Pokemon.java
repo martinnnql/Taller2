@@ -12,7 +12,7 @@ public class Pokemon {
 	private int defensaEspecial;
 	private int velocidad;
 	private String tipo;
-	private String estado = "Vivo";
+	private String estado;
 	
 	
 	public Pokemon(String nombre, String habitat, double porcentajeAparicion, int vida, int ataque, int defensa,

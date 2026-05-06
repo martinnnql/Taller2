@@ -1,5 +1,5 @@
 pepe;0
-Floatzel;Vivo
+Floatzel;Debilitado
 Milotic;Vivo
 Groudon;Vivo
 Azumarill;Vivo
@@ -8,3 +8,4 @@ Swanna;Vivo
 Ludicolo;Vivo
 Seismitoad;Vivo
 Quagsire;Vivo
+Magikarp;Vivo

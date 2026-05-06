@@ -18,8 +18,7 @@ public class Main {
 	static ArrayList<Pokemon> pokemonesJugador = new ArrayList<>();
 	static ArrayList<Pokemon> pokemonesJugadorContinuePartida = new ArrayList<>();
 	static ArrayList<LiderGym> lideres = new ArrayList<>();
-	
-	
+
 	public static void main(String[] args) throws IOException {
 
 		cargarHabitats();
@@ -62,7 +61,7 @@ public class Main {
 			case 1:
 				// Revisar equipo
 
-//				revisarEquipo();
+				revisarEquipo();
 
 				break;
 			case 2:
@@ -160,61 +159,100 @@ public class Main {
 		// TODO Auto-generated method stub
 		ArrayList<Pokemon> pokemonesLider = new ArrayList<>();
 		System.out.println("Desafiando a " + lideres.get(i).getNombre());
-
-		do {
+		ArrayList<Pokemon> AptoParaCombate = new ArrayList<>();
+		
+		// ESTE FOR RELLENA LA LISTA POKEMONESLIDER CON TODOS LOS POKES DEL LIDER
+		
 			for (String nombrePoke : lideres.get(i).getEquipo()) {
 				pokemonesLider.add(identificarPokesLider(nombrePoke));
+				
+			}
+		
+		
+		// ESTE FOR RELLENA LA LISTA APTOPARACOMBATE CON TODOS LOS POKEMONES DEL EQUIPO QUE ESTÉN VIVOS.
+		for (int j = 0; j < pokemonesJugador.size(); j++) { 
+			if(j == 6) {
+				break;
+			}
+			if (pokemonesJugador.get(j).getEstado().equalsIgnoreCase("Vivo")) {
+				AptoParaCombate.add(pokemonesJugador.get(j));
+			}
+		}
+		
+		do {
+			if (AptoParaCombate.size()==0) {
+				
+				 System.out.println("Has peridido la batalla . . .");
+				 break;
+			} else if (pokemonesLider.size() == 0) {
+				System.out.println("Has ganado la batalla !");
+				break;
 			}
 			// inicio
-
+			/*
 			System.out.println();
 			System.out.println(lideres.get(i).getNombre() + " saca a " + pokemonesLider.get(0).getNombre() + "!");
 			System.out.println(obtenernombreJugador() + " saca a " + pokemonesJugador.get(0).getNombre() + "!");
-
+			*/
+			System.out.println();
+			System.out.println(lideres.get(i).getNombre() + " saca a " + pokemonesLider.get(0).getNombre() + "!");
+			System.out.println(obtenernombreJugador() + " saca a " + AptoParaCombate.get(0).getNombre() + "!");
+			
 			// cargar opciones combate
 			int opcionCombate = cargarMenuCombate();
 			
+			if (opcionCombate == 3) {
+				break;
+			}
+			
+			
 			if (opcionCombate == 1) {
+				System.out.println(pokemonesLider.size());
+
 				// Atacar pokemon
-				
-				/* HACER UN METODO O ALGO QUE VERIFIQUE SI EL PRIMER POKEMON DEL JUGADOR ESTÁ MUERTO
-				 * Y SI ESTÁ MUERTO, PASAR AL SIGUIENTE, ASÍ HASTA SACAR AL POKEMON QUE ESTÉ VIVO, Y SI NO HAY VIVO
-				 * HACER QUE EL COMBATE TERMINE O DIRECTAMENTE QUE NO SE PUEDA PELEAR.
+
+				/*
+				 * HACER UN METODO O ALGO QUE VERIFIQUE SI EL PRIMER POKEMON DEL JUGADOR ESTÁ
+				 * MUERTO Y SI ESTÁ MUERTO, PASAR AL SIGUIENTE, ASÍ HASTA SACAR AL POKEMON QUE
+				 * ESTÉ VIVO, Y SI NO HAY VIVO HACER QUE EL COMBATE TERMINE O DIRECTAMENTE QUE
+				 * NO SE PUEDA PELEAR.
 				 * 
-				 * HACER UN METODO RESTAURAR EQUIPO LIDER DESPUES DE CADA COMBATE 
-				*/
-				Pokemon atacante = pokemonesJugador.get(0);
-				int statsAtacante = pokemonesJugador.get(0).sumaStats();
-				 
+				 * HACER UN METODO RESTAURAR EQUIPO LIDER DESPUES DE CADA COMBATE
+				 */
+				
+				Pokemon atacante = AptoParaCombate.get(0);
+				int statsAtacante = AptoParaCombate.get(0).sumaStats();
+
 				Pokemon defensor = pokemonesLider.get(0);
 				int statsDefensor = pokemonesLider.get(0).sumaStats();
-				ArrayList<Pokemon> AptoParaCombate = new ArrayList<>();
-				for (int j = 0; j < 5; j++) { // quiza este for dé problemas si el jugador tiene menos de 6 pokemones
-					if(pokemonesJugador.get(i).getEstado().equalsIgnoreCase("Vivo")) {
-						AptoParaCombate.add(pokemonesJugador.get(i));
-					}
-				}
-				/* ESTE FOR LO QUE HACE ES VER LOS PRIMEROS 6 POKEMONES DEL USUARIO Y PONE EN LA LISTA
-				 * TEMPORAL DE APTOPARACOMBATE SOLO LOS POKEMONES QUE ESTÁN VIVOS, ESTO SIRVE PARA QUE CUANDO PELEEMOS
-				 * Y NOS MATEN A UN POKEMON, LO ELIMINEMOS DE LA LISTA Y NO AFECTARÁ EN NADA, ASÍ QUE LA PELEA
-				 * TERMINARÍA CUANDO EL SIZE SEA = 0. Y DESPUÉS A LOS PRIMEROS 6 POKEMONES DEL JUGADOR LOS PONEMOS
-				 * EN DEBILITADO EN LA LISTA ESTATICA Y LISTO
-				*/
+				
+				/*
+				 * ESTE FOR LO QUE HACE ES VER LOS PRIMEROS 6 POKEMONES DEL USUARIO Y PONE EN LA
+				 * LISTA TEMPORAL DE APTOPARACOMBATE SOLO LOS POKEMONES QUE ESTÁN VIVOS, ESTO
+				 * SIRVE PARA QUE CUANDO PELEEMOS Y NOS MATEN A UN POKEMON, LO ELIMINEMOS DE LA
+				 * LISTA Y NO AFECTARÁ EN NADA, ASÍ QUE LA PELEA TERMINARÍA CUANDO EL SIZE SEA =
+				 * 0. Y DESPUÉS A LOS PRIMEROS 6 POKEMONES DEL JUGADOR LOS PONEMOS EN DEBILITADO
+				 * EN LA LISTA ESTATICA Y LISTO
+				 */
 				System.out.println();
 				System.out.println(atacante.getNombre() + " -> " + statsAtacante);
 				System.out.println(defensor.getNombre() + " -> " + statsDefensor);
-				
-				 
 
-			    double efectividad = TablaTipos.calcularEfectividad(
-			            atacante.getTipo(),
-			            defensor.getTipo()
-			    );
-				
-			    mostrarEfectividad(efectividad,atacante,defensor);
-				mostrarNuevasStats(efectividad, statsAtacante, statsDefensor,atacante,defensor);
+				double efectividad = TablaTipos.calcularEfectividad(atacante.getTipo(), defensor.getTipo());
 
-			    
+				mostrarEfectividad(efectividad, atacante, defensor);
+				mostrarNuevasStats(efectividad, statsAtacante, statsDefensor, atacante, defensor);
+				
+
+				if (defensor.getEstado().equals("Debilitado")) {
+					pokemonesLider.remove(0);
+					
+				}
+				if (atacante.getEstado().equals("Debilitado")) {
+					AptoParaCombate.remove(0);
+				}
+
+				
 			}
 			if (opcionCombate == 2) {
 				// Cambiar Pokemon
@@ -223,21 +261,14 @@ public class Main {
 			}
 			
 			
-			
-			
-			
-			
-			
 
-		} while (pokemonesJugador.size() < 0 || lideres.get(i).getCantPokemones() < 0);
-		
+		} while (AptoParaCombate.size()!=0 || pokemonesLider.size() != 0); // se repita hasta que aptoparacombate sea = 0
 		
 		// Aqui iria metodo restaurar lider
 	}
 
-	
-
-	private static void mostrarNuevasStats(double efectividad, int statsAtacante, int statsDefensor, Pokemon atacante, Pokemon defensor) {
+	private static void mostrarNuevasStats(double efectividad, int statsAtacante, int statsDefensor, Pokemon atacante,
+			Pokemon defensor) {
 
 		int nuevaStatAtacante = 0;
 		int nuevaStatDefensor = 0;
@@ -252,40 +283,44 @@ public class Main {
 		if (efectividad == 0.5) {
 			nuevaStatAtacante = statsAtacante / 2;
 		}
-		
-		System.out.println("\n"+"Nuevo Puntaje: ");
+
+		System.out.println("\n" + "Nuevo Puntaje: ");
 		System.out.println(atacante.getNombre() + " -> " + nuevaStatAtacante);
 		System.out.println(defensor.getNombre() + " -> " + nuevaStatDefensor);
-		
-		if(nuevaStatAtacante > nuevaStatDefensor) {
+
+		if (nuevaStatAtacante > nuevaStatDefensor) {
 			System.out.println(defensor.getNombre() + " Ha sido derrotado!");
+			
 			defensor.setEstado("Debilitado");
-		}else if (nuevaStatDefensor > nuevaStatAtacante) {
+		} else if (nuevaStatDefensor > nuevaStatAtacante) {
 			System.out.println(atacante.getNombre() + " Ha sido derrotado!");
+
 			atacante.setEstado("Debilitado");
+
 		}
-		
+
 	}
 
 	private static void mostrarEfectividad(double efectividad, Pokemon atacante, Pokemon defensor) {
 		// TODO Auto-generated method stub
-		if(efectividad == 2.0) {
-			System.out.println("\n"+atacante.getNombre() + " es super efectivo contra " + defensor.getNombre() + "!");
+		if (efectividad == 2.0) {
+			System.out.println("\n" + atacante.getNombre() + " es super efectivo contra " + defensor.getNombre() + "!");
 		}
-		if(efectividad == 1.0) {
-			System.out.println("\n"+atacante.getNombre() + " ataco a " + defensor.getNombre() + "!");
+		if (efectividad == 1.0) {
+			System.out.println("\n" + atacante.getNombre() + " ataco a " + defensor.getNombre() + "!");
 		}
-		if(efectividad == 0.5) {
-			System.out.println("\n"+atacante.getNombre() + " no es efectivo contra " + defensor.getNombre() + ". . .");
+		if (efectividad == 0.5) {
+			System.out
+					.println("\n" + atacante.getNombre() + " no es efectivo contra " + defensor.getNombre() + ". . .");
 		}
 	}
 
 	private static void cambiarPokemones() {
-		// Al elegir cambiar, se podrá elegir uno de los primeros 6 Pokémon para enviarlo al combate.
-		// Mostrar lista enumerada de pokemones con: sus stats (sumadas) y su estado, y al hacer el cambio el nuevo poke es quien se enfrenta al lider
-		
-		
-		
+		// Al elegir cambiar, se podrá elegir uno de los primeros 6 Pokémon para
+		// enviarlo al combate.
+		// Mostrar lista enumerada de pokemones con: sus stats (sumadas) y su estado, y
+		// al hacer el cambio el nuevo poke es quien se enfrenta al lider
+
 	}
 
 	private static int cargarMenuCombate() {
@@ -305,8 +340,9 @@ public class Main {
 				} else {
 					System.err.println("\nIngrese un numero valido. \n");
 				}
-				
+
 				if (opcionMenu == 3) {
+					System.out.println();
 					System.out.println("Has decidido rendirte . . . ");
 					break;
 				}
@@ -513,7 +549,7 @@ public class Main {
 			String estadoPoke = partesPoke[1];
 
 			// PA DESPUES, PRIMERO TERMINAR GUARDAR Y GUARDAR Y SALIR
-			identificarPokes(nombrePoke);
+			identificarPokes(nombrePoke,estadoPoke);
 		}
 		System.out.println("\nBienvenido " + nombreJugador + "!!");
 
@@ -521,10 +557,11 @@ public class Main {
 
 	}
 
-	private static void identificarPokes(String nombrePoke) {
+	private static void identificarPokes(String nombrePoke, String estadoPoke) {
 		// TODO Auto-generated method stub
 		for (Pokemon pokemon : pokemones) {
 			if (nombrePoke.equals(pokemon.getNombre())) {
+				pokemon.setEstado(estadoPoke);
 				pokemonesJugador.add(pokemon);
 
 			}
@@ -550,6 +587,9 @@ public class Main {
 			System.out.println(cont + ") " + pokemon.getNombre() + " | " + pokemon.getTipo() + " | " + "Stats totales: "
 					+ pokemon.sumaStats() + "\n");
 			cont++;
+			if (cont == 7) {
+				break;
+			}
 		}
 
 	}
@@ -646,14 +686,14 @@ public class Main {
 		System.out.println("\nQue deseas hacer? \n");
 		int opcionMenu = cargarMenuCapturar();
 		boolean existePokemon = true;
-		for(int i = 0; i < pokemonesJugador.size();i++) {
-			if(pokemonesJugador.get(i).getNombre().equals(pokeSalvaje.getNombre())) {
+		for (int i = 0; i < pokemonesJugador.size(); i++) {
+			if (pokemonesJugador.get(i).getNombre().equals(pokeSalvaje.getNombre())) {
 				System.out.println("Ya tienes a este pokémon! no puedes capturarlo!");
 				System.out.println("Volviendo al menú. . .");
 				existePokemon = false;
 			}
 		}
-		
+
 		if (opcionMenu == 2) {
 			System.out.println("\nHas huido con exito !");
 			return;
@@ -821,6 +861,7 @@ public class Main {
 			String tipo = partes[9];
 			Pokemon nuevoPokemon = new Pokemon(nombrePokemon, habitat, porcAparicion, vida, ataque, defensa,
 					ataqueEspecial, defensaEspecial, velocidad, tipo);
+			nuevoPokemon.setEstado("Vivo");
 			pokemones.add(nuevoPokemon);
 
 		}
@@ -839,7 +880,7 @@ public class Main {
 			String estado = partes[2];
 			int cantPokemones = Integer.parseInt(partes[3]);
 			ArrayList<String> pokeTemp = new ArrayList<>();
-			for (int i = 1; i < cantPokemones; i++) {
+			for (int i = 1; i < cantPokemones+1; i++) {
 				String pokemon = partes[3 + i];
 				pokeTemp.add(pokemon);
 			}
