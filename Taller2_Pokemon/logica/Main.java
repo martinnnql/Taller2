@@ -67,23 +67,24 @@ public class Main {
 			case 2:
 				// Salir a capturar
 
-				salirACapturar(); // OJO ACÁ, NO SE PUEDE VOLVER A CAPTURAR UN POKEMON QUE YA TIENES
+				salirACapturar(); // OJO ACÁ, NO SE PUEDE VOLVER A CAPTURAR UN POKEMON QUE YA TIENES (FALTA
+									// ARREGLAR)
 
 				break;
 			case 3:
 				// Acceso al PC (Cambiar pokemones del equipo)
 				pcCambiarPokes();
-				
+
 				break;
 			case 4:
 				// Retar un GYM
-				
-				if(cantMedallas() != 8) {
+
+				if (cantMedallas() != 8) {
 					retarGym();
-				}else {
+				} else {
 					System.out.println("Ya derrotaste a todos los lideres!");
 				}
-				
+
 				break;
 			case 5:
 				// Desafio Alto Mando
@@ -120,42 +121,156 @@ public class Main {
 		System.out.println("A cual lider deseas retar??");
 		System.out.println("");
 		validarLideres();
-		for(int i = 0; i < lideres.size(); i++) {
-			System.out.println(i+1 + ") " + lideres.get(i).getNombre() + " - Estado: " + lideres.get(i).getEstado());
-			
+		for (int i = 0; i < lideres.size(); i++) {
+			System.out.println(i + 1 + ") " + lideres.get(i).getNombre() + " - Estado: " + lideres.get(i).getEstado());
+
 		}
 		int opcion = 0;
 		do { // control de error numeros y letras + control error desafiar lider
 			System.out.print("> ");
-			if(scanner.hasNextInt()) {
+			if (scanner.hasNextInt()) {
 				opcion = scanner.nextInt();
-				
-				if(opcion < 0 || opcion > lideres.size()) {
+
+				if (opcion < 0 || opcion > lideres.size()) {
 					System.err.println("Porfavor, ingrese número válido.");
 				}
-				
-				if (opcion - 1 > cantMedallas()) { 
+
+				if (opcion - 1 > cantMedallas()) {
 					System.err.println("Aún no puedes retar a este líder! Debes vencer a los anteriores primero.");
-		            opcion = -1;
-				}else if(lideres.get(opcion-1).getEstado().equalsIgnoreCase("Derrotado")){
-					System.out.println("Ya has derrotado a este lider! Intenta desafiar al siguiente! (" + lideres.get(cantMedallas()).getNombre() + ")");
+					opcion = -1;
+				} else if (lideres.get(opcion - 1).getEstado().equalsIgnoreCase("Derrotado")) {
+					System.out.println("Ya has derrotado a este lider! Intenta desafiar al siguiente! ("
+							+ lideres.get(cantMedallas()).getNombre() + ")");
 					opcion = -1;
 				}
-			}else {
+			} else {
 				System.err.println("Porfavor, ingresa un NÚMERO.");
 				scanner.next();
 				opcion = -1;
 			}
+
+		} while (opcion < 0 || opcion > lideres.size());
+
+		combateGym(opcion - 1);
+
+	}
+
+	private static void combateGym(int i) throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		ArrayList<Pokemon> pokemonesLider = new ArrayList<>();
+		System.out.println("Desafiando a " + lideres.get(i).getNombre());
+
+		do {
+			for (String nombrePoke : lideres.get(i).getEquipo()) {
+				pokemonesLider.add(identificarPokesLider(nombrePoke));
+			}
+			// inicio
+
+			System.out.println();
+			System.out.println(lideres.get(i).getNombre() + " saca a " + pokemonesLider.get(0).getNombre() + "!");
+			System.out.println(obtenernombreJugador() + " saca a " + pokemonesJugador.get(0).getNombre() + "!");
+
+			// cargar opciones combate
+			int opcionCombate = cargarMenuCombate();
 			
-		}while(opcion < 0 || opcion > lideres.size());
+			if (opcionCombate == 1) {
+				// Atacar pokemon
+				atacarPokemon();
+				
+			}
+			if (opcionCombate == 2) {
+				// Cambiar Pokemon
+				cambiarPokemones();
+				
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+
+		} while (pokemonesJugador.size() < 0 || lideres.get(i).getCantPokemones() < 0);
+
+	}
+
+	private static void atacarPokemon() {
+		// Hacer logica con tabla de tipos, sacar stats, comparar stats y dar un ganador
+		
+	}
+
+	private static void cambiarPokemones() {
+		// Al elegir cambiar, se podrá elegir uno de los primeros 6 Pokémon para enviarlo al combate.
+		// Mostrar lista enumerada de pokemones con: sus stats (sumadas) y su estado, y al hacer el cambio el nuevo poke es quien se enfrenta al lider
 		
 		
 		
 	}
-	
+
+	private static int cargarMenuCombate() {
+		// TODO Auto-generated method stub
+		Scanner s = new Scanner(System.in);
+		int opcionMenu = 0;
+		boolean condicion = false;
+		while (!condicion) {
+			try {
+				System.out.println(
+						"\nQue deseas hacer?\r\n" + "1) Atacar\r\n" + "2) Cambiar de pokemon\r\n" + "3) Rendirse");
+				System.out.print("Ingrese Opcion: ");
+
+				opcionMenu = s.nextInt();
+				if (opcionMenu <= 3 && opcionMenu >= 1) {
+					condicion = true;
+				} else {
+					System.err.println("\nIngrese un numero valido. \n");
+				}
+				
+				if (opcionMenu == 3) {
+					System.out.println("Has decidido rendirte . . . ");
+					break;
+				}
+
+			} catch (Exception e) {
+				System.err.println("\nIngrese un valor valido. \n");
+				s.nextLine();
+			}
+		}
+
+		s.nextLine();
+		return opcionMenu;
+	}
+
+	private static String obtenernombreJugador() throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		File archivo = new File("Registros.txt");
+		Scanner lector = new Scanner(archivo);
+
+		String linea = lector.nextLine();
+		String[] partes = linea.split(";");
+
+		String nombreJugador = partes[0];
+
+		return nombreJugador;
+	}
+
+	private static Pokemon identificarPokesLider(String nombrePoke) {
+		// TODO Auto-generated method stub
+
+		for (Pokemon pokemon : pokemones) {
+			if (nombrePoke.equals(pokemon.getNombre())) {
+				return pokemon;
+
+			}
+
+		}
+		return null;
+
+	}
 
 	private static void validarLideres() throws FileNotFoundException {
-		for(int i = 0; i < cantMedallas(); i++) {
+		for (int i = 0; i < cantMedallas(); i++) {
 			lideres.get(i).setEstado("Derrotado");
 		}
 	}
@@ -166,7 +281,7 @@ public class Main {
 		String linea = s.nextLine();
 		String[] partes = linea.split(";");
 		int cantMedallas = Integer.parseInt(partes[1]);
-		
+
 		return cantMedallas;
 	}
 
@@ -177,26 +292,26 @@ public class Main {
 		BufferedWriter bf = new BufferedWriter(new FileWriter("Registros.txt"));
 		bf.write(linea);
 		bf.newLine();
-	
+
 		for (Pokemon p : pokemonesJugador) {
 			String lineaPoke = p.getNombre() + ";" + p.getEstado();
 			bf.write(lineaPoke);
 			bf.newLine();
 		}
-		
+
 		bf.close();
 	}
 
 	private static void pcCambiarPokes() {
 		Scanner s = new Scanner(System.in);
-		
+
 		// mostrar de manera numerada todos los Pokémon que el usuario haya capturado.
 		int cont = 1;
 		for (Pokemon pokemon : pokemonesJugador) {
-			System.out.println("\n"+cont + ") " + pokemon.getNombre());
+			System.out.println("\n" + cont + ") " + pokemon.getNombre());
 			cont++;
 		}
-		
+
 		// mostrar opciones
 		int opcion = 0;
 		boolean condicion = false;
@@ -226,74 +341,69 @@ public class Main {
 			}
 
 		}
-		
+
 		// condicion true
-		if(opcion == 1) {
+		if (opcion == 1) {
 			intercambiarPokes();
 		}
-		
-		
-		
+
 	}
 
 	private static void intercambiarPokes() {
 		Scanner s = new Scanner(System.in);
 		int cantPokes = pokemonesJugador.size();
-		
-		
-		int intercambio1=0;
+
+		int intercambio1 = 0;
 		do {
 			System.out.println("Elije el primer pokemon para cambiar: ");
 			System.out.print("> ");
 
 			if (s.hasNextInt()) {
 				intercambio1 = s.nextInt();
-				
-				if(intercambio1<0 || intercambio1>cantPokes) {
+
+				if (intercambio1 < 0 || intercambio1 > cantPokes) {
 					System.err.println("Ingrese un número válido.");
 				}
-				
-				
-			}else {
+
+			} else {
 				System.err.println("Elije un número válido.");
-				intercambio1 =0;
+				intercambio1 = 0;
 			}
-			
-		}while(intercambio1<0 || intercambio1>cantPokes);
-		
-		int intercambio2=0;
+
+		} while (intercambio1 < 0 || intercambio1 > cantPokes);
+
+		int intercambio2 = 0;
 		do {
 			System.out.println("Elije el segundo pokemon para cambiar: ");
 			System.out.print("> ");
 
 			if (s.hasNextInt()) {
 				intercambio2 = s.nextInt();
-				
-				if(intercambio2<0 || intercambio2>cantPokes) {
+
+				if (intercambio2 < 0 || intercambio2 > cantPokes) {
 					System.err.println("Ingrese un número válido.");
 				}
-				
-				
-			}else {
+
+			} else {
 				System.err.println("Elije un número válido.");
-				intercambio1 =0;
+				intercambio1 = 0;
 			}
-			
-		}while(intercambio2<0 || intercambio2>cantPokes);
-		
+
+		} while (intercambio2 < 0 || intercambio2 > cantPokes);
+
 		intercambio1 -= 1;
 		intercambio2 -= 1;
-		
-		// hacer el intercambio con los index (intercambio -1) *CANT POKES +1 POSIBLEMENTE*
-		
+
+		// hacer el intercambio con los index (intercambio -1) *CANT POKES +1
+		// POSIBLEMENTE*
+
 		int aux = intercambio2;
 		Pokemon auxPoke = pokemonesJugador.get(intercambio1);
-		
+
 		pokemonesJugador.set(intercambio1, pokemonesJugador.get(intercambio2));
-		
-		pokemonesJugador.set(aux,auxPoke);
-		
-		
+
+		pokemonesJugador.set(aux, auxPoke);
+
 		System.out.println("Intercambio realizado con exito!");
 	}
 
