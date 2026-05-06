@@ -23,7 +23,7 @@ public class Main {
 
 		cargarHabitats();
 		cargarPokemones();
-
+		cargarLideres();
 		// Primer menu
 
 		int opcionMenu1 = cargarMenu1();
@@ -67,7 +67,7 @@ public class Main {
 			case 2:
 				// Salir a capturar
 
-				salirACapturar();
+				salirACapturar(); // OJO ACÁ, NO SE PUEDE VOLVER A CAPTURAR UN POKEMON QUE YA TIENES
 
 				break;
 			case 3:
@@ -77,7 +77,13 @@ public class Main {
 				break;
 			case 4:
 				// Retar un GYM
-
+				
+				if(cantMedallas() != 8) {
+					retarGym();
+				}else {
+					System.out.println("Ya derrotaste a todos los lideres!");
+				}
+				
 				break;
 			case 5:
 				// Desafio Alto Mando
@@ -107,6 +113,61 @@ public class Main {
 				break;
 			}
 		}
+	}
+
+	private static void retarGym() throws FileNotFoundException {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("A cual lider deseas retar??");
+		System.out.println("");
+		validarLideres();
+		for(int i = 0; i < lideres.size(); i++) {
+			System.out.println(i+1 + ") " + lideres.get(i).getNombre() + " - Estado: " + lideres.get(i).getEstado());
+			
+		}
+		int opcion = 0;
+		do { // control de error numeros y letras + control error desafiar lider
+			System.out.print("> ");
+			if(scanner.hasNextInt()) {
+				opcion = scanner.nextInt();
+				
+				if(opcion < 0 || opcion > lideres.size()) {
+					System.err.println("Porfavor, ingrese número válido.");
+				}
+				
+				if (opcion - 1 > cantMedallas()) { 
+					System.err.println("Aún no puedes retar a este líder! Debes vencer a los anteriores primero.");
+		            opcion = -1;
+				}else if(lideres.get(opcion-1).getEstado().equalsIgnoreCase("Derrotado")){
+					System.out.println("Ya has derrotado a este lider! Intenta desafiar al siguiente! (" + lideres.get(cantMedallas()).getNombre() + ")");
+					opcion = -1;
+				}
+			}else {
+				System.err.println("Porfavor, ingresa un NÚMERO.");
+				scanner.next();
+				opcion = -1;
+			}
+			
+		}while(opcion < 0 || opcion > lideres.size());
+		
+		
+		
+	}
+	
+
+	private static void validarLideres() throws FileNotFoundException {
+		for(int i = 0; i < cantMedallas(); i++) {
+			lideres.get(i).setEstado("Derrotado");
+		}
+	}
+
+	private static int cantMedallas() throws FileNotFoundException {
+		File archivo = new File("Registros.txt");
+		Scanner s = new Scanner(archivo);
+		String linea = s.nextLine();
+		String[] partes = linea.split(";");
+		int cantMedallas = Integer.parseInt(partes[1]);
+		
+		return cantMedallas;
 	}
 
 	private static void guardarPartida() throws IOException {
