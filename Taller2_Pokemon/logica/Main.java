@@ -18,7 +18,8 @@ public class Main {
 	static ArrayList<Pokemon> pokemonesJugador = new ArrayList<>();
 	static ArrayList<Pokemon> pokemonesJugadorContinuePartida = new ArrayList<>();
 	static ArrayList<LiderGym> lideres = new ArrayList<>();
-
+	
+	
 	public static void main(String[] args) throws IOException {
 
 		cargarHabitats();
@@ -61,7 +62,7 @@ public class Main {
 			case 1:
 				// Revisar equipo
 
-				revisarEquipo();
+//				revisarEquipo();
 
 				break;
 			case 2:
@@ -175,13 +176,49 @@ public class Main {
 			
 			if (opcionCombate == 1) {
 				// Atacar pokemon
-				atacarPokemon();
 				
+				/* HACER UN METODO O ALGO QUE VERIFIQUE SI EL PRIMER POKEMON DEL JUGADOR ESTÁ MUERTO
+				 * Y SI ESTÁ MUERTO, PASAR AL SIGUIENTE, ASÍ HASTA SACAR AL POKEMON QUE ESTÉ VIVO, Y SI NO HAY VIVO
+				 * HACER QUE EL COMBATE TERMINE O DIRECTAMENTE QUE NO SE PUEDA PELEAR.
+				 * 
+				 * HACER UN METODO RESTAURAR EQUIPO LIDER DESPUES DE CADA COMBATE 
+				*/
+				Pokemon atacante = pokemonesJugador.get(0);
+				int statsAtacante = pokemonesJugador.get(0).sumaStats();
+				 
+				Pokemon defensor = pokemonesLider.get(0);
+				int statsDefensor = pokemonesLider.get(0).sumaStats();
+				ArrayList<Pokemon> AptoParaCombate = new ArrayList<>();
+				for (int j = 0; j < 5; j++) { // quiza este for dé problemas si el jugador tiene menos de 6 pokemones
+					if(pokemonesJugador.get(i).getEstado().equalsIgnoreCase("Vivo")) {
+						AptoParaCombate.add(pokemonesJugador.get(i));
+					}
+				}
+				/* ESTE FOR LO QUE HACE ES VER LOS PRIMEROS 6 POKEMONES DEL USUARIO Y PONE EN LA LISTA
+				 * TEMPORAL DE APTOPARACOMBATE SOLO LOS POKEMONES QUE ESTÁN VIVOS, ESTO SIRVE PARA QUE CUANDO PELEEMOS
+				 * Y NOS MATEN A UN POKEMON, LO ELIMINEMOS DE LA LISTA Y NO AFECTARÁ EN NADA, ASÍ QUE LA PELEA
+				 * TERMINARÍA CUANDO EL SIZE SEA = 0. Y DESPUÉS A LOS PRIMEROS 6 POKEMONES DEL JUGADOR LOS PONEMOS
+				 * EN DEBILITADO EN LA LISTA ESTATICA Y LISTO
+				*/
+				System.out.println();
+				System.out.println(atacante.getNombre() + " -> " + statsAtacante);
+				System.out.println(defensor.getNombre() + " -> " + statsDefensor);
+				
+				 
+
+			    double efectividad = TablaTipos.calcularEfectividad(
+			            atacante.getTipo(),
+			            defensor.getTipo()
+			    );
+				
+			    mostrarEfectividad(efectividad,atacante,defensor);
+				mostrarNuevasStats(efectividad, statsAtacante, statsDefensor,atacante,defensor);
+
+			    
 			}
 			if (opcionCombate == 2) {
 				// Cambiar Pokemon
 				cambiarPokemones();
-				
 				
 			}
 			
@@ -193,12 +230,54 @@ public class Main {
 			
 
 		} while (pokemonesJugador.size() < 0 || lideres.get(i).getCantPokemones() < 0);
-
+		
+		
+		// Aqui iria metodo restaurar lider
 	}
 
-	private static void atacarPokemon() {
-		// Hacer logica con tabla de tipos, sacar stats, comparar stats y dar un ganador
+	
+
+	private static void mostrarNuevasStats(double efectividad, int statsAtacante, int statsDefensor, Pokemon atacante, Pokemon defensor) {
+
+		int nuevaStatAtacante = 0;
+		int nuevaStatDefensor = 0;
+		if (efectividad == 2.0) {
+			nuevaStatDefensor = statsDefensor / 2;
+
+		}
+		if (efectividad == 1.0) {
+			nuevaStatAtacante = statsAtacante;
+			nuevaStatDefensor = statsDefensor;
+		}
+		if (efectividad == 0.5) {
+			nuevaStatAtacante = statsAtacante / 2;
+		}
 		
+		System.out.println("\n"+"Nuevo Puntaje: ");
+		System.out.println(atacante.getNombre() + " -> " + nuevaStatAtacante);
+		System.out.println(defensor.getNombre() + " -> " + nuevaStatDefensor);
+		
+		if(nuevaStatAtacante > nuevaStatDefensor) {
+			System.out.println(defensor.getNombre() + " Ha sido derrotado!");
+			defensor.setEstado("Debilitado");
+		}else if (nuevaStatDefensor > nuevaStatAtacante) {
+			System.out.println(atacante.getNombre() + " Ha sido derrotado!");
+			atacante.setEstado("Debilitado");
+		}
+		
+	}
+
+	private static void mostrarEfectividad(double efectividad, Pokemon atacante, Pokemon defensor) {
+		// TODO Auto-generated method stub
+		if(efectividad == 2.0) {
+			System.out.println("\n"+atacante.getNombre() + " es super efectivo contra " + defensor.getNombre() + "!");
+		}
+		if(efectividad == 1.0) {
+			System.out.println("\n"+atacante.getNombre() + " ataco a " + defensor.getNombre() + "!");
+		}
+		if(efectividad == 0.5) {
+			System.out.println("\n"+atacante.getNombre() + " no es efectivo contra " + defensor.getNombre() + ". . .");
+		}
 	}
 
 	private static void cambiarPokemones() {

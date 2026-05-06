@@ -1,7 +1,13 @@
 package dominio;
 
 public class TablaTipos {
-
+	private static final String[] TIPOS = {
+		    "NORMAL", "FUEGO", "AGUA", "PLANTA", "ELECTRICO",
+		    "HIELO", "LUCHA", "VENENO", "TIERRA", "VOLADOR",
+		    "PSIQUICO", "BICHO", "ROCA", "FANTASMA", "DRAGON",
+		    "ACERO", "SINIESTRO", "HADA"
+		};
+	
 	// Matriz de efectividad
     private static final double[][] EFECTIVIDAD = {
         // NOR  FUE  AGU  PLA  ELE  HIE  LUC  VEN  TIE  VOL  PSI  BIC  ROC  FAN  DRA  ACE  SIN  HAD
@@ -29,5 +35,24 @@ public class TablaTipos {
 		return EFECTIVIDAD;
 	}
 
+	public static int getIndiceTipo(String tipo) {
+		for (int i = 0; i < TIPOS.length; i++) {
+
+	        if (TIPOS[i].equalsIgnoreCase(tipo)) {
+	            return i;
+	        }
+	    }
+
+	    return -1;
+	}
+	
+	public static double calcularEfectividad(String tipoAtacante, String tipoDefensor) {
+
+        int indiceAtaque = getIndiceTipo(tipoAtacante);
+        int indiceDefensa = getIndiceTipo(tipoDefensor);
+
+        return EFECTIVIDAD[indiceAtaque][indiceDefensa];
+    }
+	
 	
 }
