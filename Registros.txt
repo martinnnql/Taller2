@@ -2,3 +2,9 @@ pepe;0
 Floatzel;Vivo
 Milotic;Vivo
 Groudon;Vivo
+Azumarill;Vivo
+Psyduck;Vivo
+Swanna;Vivo
+Ludicolo;Vivo
+Seismitoad;Vivo
+Quagsire;Vivo

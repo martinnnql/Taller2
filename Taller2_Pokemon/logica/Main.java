@@ -566,11 +566,19 @@ public class Main {
 
 		System.out.println("\nQue deseas hacer? \n");
 		int opcionMenu = cargarMenuCapturar();
-
+		boolean existePokemon = true;
+		for(int i = 0; i < pokemonesJugador.size();i++) {
+			if(pokemonesJugador.get(i).getNombre().equals(pokeSalvaje.getNombre())) {
+				System.out.println("Ya tienes a este pokémon! no puedes capturarlo!");
+				System.out.println("Volviendo al menú. . .");
+				existePokemon = false;
+			}
+		}
+		
 		if (opcionMenu == 2) {
 			System.out.println("\nHas huido con exito !");
 			return;
-		} else if (opcionMenu == 1) {
+		} else if (opcionMenu == 1 && existePokemon == true) {
 			// hola nacho aqui falta hacer todo lo de capturar al pokemon ( q tenga
 			// probabilidad de capturarlo ) y meterlo al equipo
 
