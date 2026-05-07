@@ -5,7 +5,6 @@ public class AltoMando {
 	private String nombre;
 	private ArrayList<String> equipo;
 	
-	
 	public AltoMando(int numAltoMando, String nombre, ArrayList<String> equipo) {
 		super();
 		this.numAltoMando = numAltoMando;

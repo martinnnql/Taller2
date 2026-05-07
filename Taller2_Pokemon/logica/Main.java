@@ -1,4 +1,4 @@
-// Martin Arancibia | 22.273.853-9  && Ignacio Valdivia | 22.179.357-9
+// Martin Arancibia | 22.273.853-9 ICCI && Ignacio Valdivia | 22.179.357-9 ICCI
 package logica;
 
 import java.io.FileNotFoundException;
@@ -66,8 +66,9 @@ public class Main {
 			String nombreAltoMando = partes[1];
 			int cantPokemones = 6;
 			ArrayList<String> pokeTemp = new ArrayList<>();
-			for (int i = 1; i < cantPokemones + 1; i++) {
+			for (int i = 0; i < cantPokemones; i++) {
 				String pokemon = partes[2 + i];
+
 				pokeTemp.add(pokemon);
 			}
 			AltoMando nuevoAltoMando = new AltoMando(numAltoMando, nombreAltoMando, pokeTemp);
@@ -113,8 +114,12 @@ public class Main {
 				break;
 			case 5:
 				// Desafio Alto Mando
-				retarAltoMando();
-			
+				
+				if(cantMedallas == 8) {
+					retarAltoMando();
+				}else {
+					System.out.println("Necesitas 8 medallas para retar al alto mando (tienes " + cantMedallas + ")");
+				}
 				break;
 			case 6:
 				// Curar Pokemones
@@ -143,11 +148,107 @@ public class Main {
 		}
 	}
 
-	private static void retarAltoMando() {
-		// TODO Auto-generated method stub
-		
-		//Continuar despues de clases  a la verga
-		
+	private static void retarAltoMando() throws FileNotFoundException {
+	    ArrayList<Pokemon> AptoParaCombate = new ArrayList<>();
+	    
+	    for (int j = 0; j < pokemonesJugador.size(); j++) {
+	        if (j == 6) {
+	            break;
+	        }
+	        if (pokemonesJugador.get(j).getEstado().equalsIgnoreCase("Vivo")) {
+	            AptoParaCombate.add(pokemonesJugador.get(j));
+	        }
+	    }
+
+	    if (AptoParaCombate.size() == 0) {
+	        System.out.println("No tienes pokemones en condiciones de luchar. . .");
+	        return;
+	    }
+
+	    int victorias = 0;
+	    boolean rendido = false;
+
+	    // este es el for de los líderes del Alto Mando
+	    for (int i = 0; i < altoMando.size(); i++) {
+	        ArrayList<Pokemon> PokemonesAltoMando = identificarPokesAltoMando(i);
+	        
+	        System.out.println("\n--- DESAFÍO CONTRA: " + altoMando.get(i).getNombre() + " ---");
+
+	        // while del combate con X lider
+	        while (AptoParaCombate.size() != 0 && PokemonesAltoMando.size() != 0) {
+	            
+	            System.out.println("\n" + altoMando.get(i).getNombre() + " saca a " + PokemonesAltoMando.get(0).getNombre());
+	            System.out.println(obtenernombreJugador() + " saca a " + AptoParaCombate.get(0).getNombre());
+
+	            int opcionCombate = cargarMenuCombate();
+
+	            if (opcionCombate == 3) { 
+	                rendido = true;
+	                break;
+	            }
+
+	            if (opcionCombate == 1) { 
+	                Pokemon atacante = AptoParaCombate.get(0);
+	                Pokemon defensor = PokemonesAltoMando.get(0);
+
+	                double efectividad = TablaTipos.calcularEfectividad(atacante.getTipo(), defensor.getTipo());
+	                mostrarEfectividad(efectividad, atacante, defensor);
+	                mostrarNuevasStats(efectividad, atacante.sumaStats(), defensor.sumaStats(), atacante, defensor);
+
+	                if (defensor.getEstado().equals("Debilitado")) {
+	                    PokemonesAltoMando.remove(0);
+	                }
+	                if (atacante.getEstado().equals("Debilitado")) {
+	                    AptoParaCombate.remove(0);
+	                }
+	            }
+
+	            if (opcionCombate == 2) { 
+	                cambiarPokemones(AptoParaCombate);
+	            }
+
+	            
+	            if (AptoParaCombate.size() == 0) {
+	                System.out.println("\nHas perdido contra " + altoMando.get(i).getNombre() + " . . .");
+	                
+	                
+	                for (int k = 0; k < pokemonesJugador.size(); k++) {
+	                    if (k == 6) {
+	                        break;
+	                    }
+	                    pokemonesJugador.get(k).setEstado("Debilitado");
+	                }
+	                rendido = true;
+	                break;
+	            }
+
+	            
+	            if (PokemonesAltoMando.size() == 0) {
+	                System.out.println("¡Has derrotado a " + altoMando.get(i).getNombre() + "!");
+	            }
+	        }
+
+	        if (rendido) {
+	            break;
+	        }
+	        
+	        victorias++;
+	    }
+
+	    if (victorias == altoMando.size()) {
+	        System.out.println("\n¡¡FELICIDADES CAMPEON!!");
+	    } else {
+	        System.out.println("\nHas fallado en el reto del Alto Mando. Intentalo denuevo.");
+	    }
+	}
+
+	private static ArrayList<Pokemon> identificarPokesAltoMando(int indice) {
+		// el indice sirve para ver a que lider del alto mando estamos enfrentando
+		ArrayList<Pokemon> pokesAltoMando = new ArrayList<>();
+		for (String nombre : altoMando.get(indice).getEquipo()) {
+			pokesAltoMando.add(identificarPokesLider(nombre));
+		}
+		return pokesAltoMando;
 	}
 
 	private static void retarGym() throws FileNotFoundException {
@@ -224,12 +325,7 @@ public class Main {
 				break;
 			}
 			// inicio
-			/*
-			 * System.out.println(); System.out.println(lideres.get(i).getNombre() +
-			 * " saca a " + pokemonesLider.get(0).getNombre() + "!");
-			 * System.out.println(obtenernombreJugador() + " saca a " +
-			 * pokemonesJugador.get(0).getNombre() + "!");
-			 */
+			
 			System.out.println();
 			System.out.println(lideres.get(i).getNombre() + " saca a " + pokemonesLider.get(0).getNombre() + "!");
 			System.out.println(obtenernombreJugador() + " saca a " + AptoParaCombate.get(0).getNombre() + "!");

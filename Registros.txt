@@ -1,4 +1,4 @@
-martin;1
+martin;8
 Froslass;Vivo
 Samurott;Vivo
 Sceptile;Vivo
