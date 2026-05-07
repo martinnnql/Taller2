@@ -18,6 +18,7 @@ public class Main {
 	static ArrayList<Pokemon> pokemonesJugador = new ArrayList<>();
 	static ArrayList<Pokemon> pokemonesJugadorContinuePartida = new ArrayList<>();
 	static ArrayList<LiderGym> lideres = new ArrayList<>();
+	static ArrayList<AltoMando> altoMando = new ArrayList<>();
 	static int cantMedallas = 0;
 
 	public static void main(String[] args) throws IOException {
@@ -25,6 +26,7 @@ public class Main {
 		cargarHabitats();
 		cargarPokemones();
 		cargarLideres();
+		cargarAltoMando();
 		// Primer menu
 
 		int opcionMenu1 = cargarMenu1();
@@ -50,6 +52,28 @@ public class Main {
 			cargarOpciones();
 		}
 
+	}
+
+	private static void cargarAltoMando() throws FileNotFoundException {
+		File archivo = new File("Alto Mando.txt");
+		Scanner lector = new Scanner(archivo);
+
+		while (lector.hasNextLine()) {
+			String linea = lector.nextLine();
+			String[] partes = linea.split(";");
+			
+			int numAltoMando = Integer.parseInt(partes[0]);
+			String nombreAltoMando = partes[1];
+			int cantPokemones = 6;
+			ArrayList<String> pokeTemp = new ArrayList<>();
+			for (int i = 1; i < cantPokemones + 1; i++) {
+				String pokemon = partes[2 + i];
+				pokeTemp.add(pokemon);
+			}
+			AltoMando nuevoAltoMando = new AltoMando(numAltoMando, nombreAltoMando, pokeTemp);
+			altoMando.add(nuevoAltoMando);
+			
+		}
 	}
 
 	private static void cargarOpciones() throws IOException {
@@ -89,7 +113,8 @@ public class Main {
 				break;
 			case 5:
 				// Desafio Alto Mando
-
+				retarAltoMando();
+			
 				break;
 			case 6:
 				// Curar Pokemones
@@ -116,6 +141,13 @@ public class Main {
 				break;
 			}
 		}
+	}
+
+	private static void retarAltoMando() {
+		// TODO Auto-generated method stub
+		
+		//Continuar despues de clases  a la verga
+		
 	}
 
 	private static void retarGym() throws FileNotFoundException {
