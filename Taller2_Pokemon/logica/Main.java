@@ -820,7 +820,7 @@ public class Main {
 				if (opcion <= 7 && opcion >= 1) {
 					condicion = true;
 				} else {
-					System.err.println("\nIngrese un numero valido mongolo\n");
+					System.err.println("\nIngrese un numero valido\n");
 				}
 
 				if (opcion == 7) {
@@ -829,7 +829,7 @@ public class Main {
 				}
 
 			} catch (Exception e) {
-				System.err.println("\nIngrese un valor validoooooooo putoooooo\n");
+				System.err.println("\nIngrese un valor valido\n");
 				s.nextLine();
 			}
 
