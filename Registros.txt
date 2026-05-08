@@ -1,7 +1,8 @@
-martin;8
-Froslass;Vivo
+martin;0
+Kingler;Vivo
 Samurott;Vivo
 Sceptile;Vivo
 Infernape;Vivo
-Kingler;Vivo
+Froslass;Vivo
 Umbreon;Vivo
+Psyduck;Vivo

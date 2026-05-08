@@ -646,63 +646,73 @@ public class Main {
 	}
 
 	private static void intercambiarPokes() {
-		Scanner s = new Scanner(System.in);
-		int cantPokes = pokemonesJugador.size();
 
-		int intercambio1 = 0;
-		do {
-			System.out.println("Elije el primer pokemon para cambiar: ");
-			System.out.print("> ");
+	    Scanner s = new Scanner(System.in);
 
-			if (s.hasNextInt()) {
-				intercambio1 = s.nextInt();
+	    int cantPokes = pokemonesJugador.size();
 
-				if (intercambio1 < 0 || intercambio1 > cantPokes) {
-					System.err.println("Ingrese un número válido.");
-				}
+	    int intercambio1 = 0;
 
-			} else {
-				System.err.println("Elije un número válido.");
-				intercambio1 = 0;
-			}
+	    do {
 
-		} while (intercambio1 < 0 || intercambio1 > cantPokes);
+	        System.out.println("Elije el primer pokemon para cambiar: ");
+	        System.out.print("> ");
 
-		int intercambio2 = 0;
-		do {
-			System.out.println("Elije el segundo pokemon para cambiar: ");
-			System.out.print("> ");
+	        if (s.hasNextInt()) {
 
-			if (s.hasNextInt()) {
-				intercambio2 = s.nextInt();
+	            intercambio1 = s.nextInt();
 
-				if (intercambio2 < 0 || intercambio2 > cantPokes) {
-					System.err.println("Ingrese un número válido.");
-				}
+	            if (intercambio1 <= 0 || intercambio1 > cantPokes) {
 
-			} else {
-				System.err.println("Elije un número válido.");
-				intercambio1 = 0;
-			}
+	                System.err.println("Ingrese un número válido.");
+	            }
 
-		} while (intercambio2 < 0 || intercambio2 > cantPokes);
+	        } else {
 
-		intercambio1 -= 1;
-		intercambio2 -= 1;
+	            System.err.println("Ingrese un número!.");
+	            s.nextLine(); // LIMPIA EL BUFFER
+	            intercambio1 = 0;
+	        }
 
-		// hacer el intercambio con los index (intercambio -1) *CANT POKES +1
-		// POSIBLEMENTE*
+	    } while (intercambio1 <= 0 || intercambio1 > cantPokes);
 
-		int aux = intercambio2;
-		Pokemon auxPoke = pokemonesJugador.get(intercambio1);
+	    int intercambio2 = 0;
 
-		pokemonesJugador.set(intercambio1, pokemonesJugador.get(intercambio2));
+	    do {
 
-		pokemonesJugador.set(aux, auxPoke);
+	        System.out.println("Elije el segundo pokemon para cambiar: ");
+	        System.out.print("> ");
 
-		System.out.println("Intercambio realizado con exito!");
+	        if (s.hasNextInt()) {
+
+	            intercambio2 = s.nextInt();
+
+	            if (intercambio2 <= 0 || intercambio2 > cantPokes) {
+
+	                System.err.println("Ingrese un número válido.");
+	            }
+
+	        } else {
+
+	            System.err.println("Ingrese un número!.");
+	            s.nextLine(); // LIMPIA EL BUFFER
+	            intercambio2 = 0;
+	        }
+
+	    } while (intercambio2 <= 0 || intercambio2 > cantPokes);
+
+	    intercambio1 -= 1;
+	    intercambio2 -= 1;
+
+	    Pokemon auxPoke = pokemonesJugador.get(intercambio1);
+
+	    pokemonesJugador.set(intercambio1, pokemonesJugador.get(intercambio2));
+
+	    pokemonesJugador.set(intercambio2, auxPoke);
+
+	    System.out.println("Intercambio realizado con exito!");
 	}
-
+	
 	private static void nuevoJugador(String nombreJugador) throws IOException {
 		BufferedWriter bf = new BufferedWriter(new FileWriter("Registros.txt"));
 		String linea = nombreJugador + ";" + 0;
